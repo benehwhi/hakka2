@@ -18,9 +18,14 @@
         body { background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 70px; }
         header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; text-align: center; padding: 20px 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         header h1 { margin: 0; font-size: 24px; letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        
+        /* 管理工具列 */
         .control-bar { background-color: #E9EEF5; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; border-bottom: 1px solid #D0D7DE; }
-        .info-tips { font-weight: bold; color: #444; }
-        .clear-btn { background-color: var(--danger); color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .back-btn { background-color: #555555; color: white; text-decoration: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .back-btn:active { background-color: #333333; }
+        .clear-btn { background-color: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .clear-btn:active { background-color: #C62828; }
+        
         .tabs { display: flex; justify-content: space-around; background: white; border-bottom: 2px solid #E0E0E0; position: sticky; top: 0; z-index: 100; }
         .tab-btn { background: none; border: none; padding: 15px 10px; font-size: 16px; font-weight: bold; color: #666666; cursor: pointer; width: 100%; text-align: center; }
         .tab-btn.active { color: var(--primary-dark); border-bottom: 4px solid var(--primary-dark); background-color: var(--primary-light); }
@@ -47,7 +52,7 @@
     </header>
 
     <div class="control-bar">
-        <span class="info-tips">💡 第二課同學換人使用前，請點擊 ➡️</span>
+        <a href="index.html" class="back-btn">⬅️ 返回總目錄</a>
         <button class="clear-btn" onclick="clearAllFavorites()">🧹 清除第二課收藏</button>
     </div>
 
@@ -64,21 +69,16 @@
     </div>
 
     <script>
-        // ==========================================
-        // 💾 第二課教材內容
-        // ==========================================
         const rawData = [
             { type: "單詞", hakka: "阿爸", pinyin: "a_ baˋ", chinese: "爸爸", audioId: "Andy.mp3" },
             { type: "單詞", hakka: "阿姆", pinyin: "a_ meˊ", chinese: "媽媽", audioId: "Andy.mp3" },
             { type: "句子", hakka: "長兄代父，長姊代母", pinyin: "chiongˇ hiong_ toi+ fu+, chiongˇ ziˋ toi+ meˊ", chinese: "長兄如父，長姊如母", audioId: "Andy.mp3" }
         ];
-        // ==========================================
 
         let wordsData = [];
         let sentencesData = [];
         let favorites = [];
 
-        // 獨立的記憶體標籤，確保第二課收藏獨立
         const STORAGE_KEY = 'hakka_favs_lesson2';
 
         function initApp() {
