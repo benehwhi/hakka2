@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>饒平客語學習樂園</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        :root {
+            --primary: #1E88E5;         /* 兒童天空藍 */
+            --primary-light: #E3F2FD;   /* 淺藍背景 */
+            --primary-dark: #1565C0;    /* 深藍強調 */
+            --secondary: #00BCD4;       /* 亮藍綠（播放鈕） */
+            --bg: #F4F6F9;              /* 輕快底色 */
+            --card-bg: #FFFFFF;
+            --text: #333333;
+        }
+        * { box-sizing: border-box; font-family: 'Arial', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 70px; }
+        
+        header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; text-align: center; padding: 20px 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        header h1 { margin: 0; font-size: 24px; letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        
+        .account-bar { background-color: #E9EEF5; padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; border-bottom: 1px solid #D0D7DE; }
+        .user-profile { display: flex; align-items: center; gap: 8px; font-weight: bold; color: #444; }
+        .user-avatar { width: 28px; height: 28px; border-radius: 50%; border: 1px solid #CCC; display: none; }
+        
+        .tabs { display: flex; justify-content: space-around; background: white; border-bottom: 2px solid #E0E0E0; position: sticky; top: 0; z-index: 100; }
+        .tab-btn { background: none; border: none; padding: 15px 10px; font-size: 16px; font-weight: bold; color: #666666; cursor: pointer; width: 100%; text-align: center; }
+        .tab-btn.active { color: var(--primary-dark); border-bottom: 4px solid var(--primary-dark); background-color: var(--primary-light); }
+        
+        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
+        .page { display: none; }
+        .page.active { display: block; }
+        
+        .card { background: var(--card-bg); border-radius: 16px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); display: flex; align-items: center; position: relative; border: 2px solid #E3F2FD; cursor: pointer; }
+        .card-img { width: 85px; height: 85px; border-radius: 12px; object-fit: cover; margin-right: 15px; background-color: #EEE; border: 1px solid #E0E0E0; }
+        .card-info { flex: 1; padding-right: 30px; }
+        .card-hakka { font-size: 22px; font-weight: bold; color: var(--primary-dark); margin: 0 0 5px 0; }
+        .card-pinyin { font-size: 14px; color: #666666; margin: 0 0 5px 0; font-family: monospace; }
+        .card-chinese { font-size: 16px; color: #555555; margin: 0; }
+        
+        .play-icon { font-size: 26px; color: var(--secondary); margin-right: 12px; }
+        .fav-btn { background: none; border: none; font-size: 30px; color: #E0E0E0; cursor: pointer; padding: 10px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 10; }
+        .fav-btn.is-fav { color: #FF4081; }
+        
+        .empty-msg { text-align: center; color: #999; margin-top: 50px; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>饒平客語學習樂園 🎒</h1>
+    </header>
+
+    <div class="account-bar">
+        <div class="user-profile">
+            <img id="user-avatar" class="user-avatar" src="" alt="avatar">
+            <span id="user-status">👤 訪客模式 (收藏將記在本地平板)</span>
+        </div>
+        <div id="google-btn-wrapper">
+            <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com" data-callback="handleCredentialResponse" data-auto_prompt="false"></div>
+            <div class="g_id_signin" data-type="standard" data-size="small" data-theme="filled_blue" data-shape="rectangular"></div>
+        </div>
+        <button id="logout-btn" onclick="logoutAccount()">登出</button>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchPage('words-page', event)">🔤 饒平單詞</button>
+        <button class="tab-btn" onclick="switchPage('sentences-page', event)">💬 饒平諺語</button>
+        <button class="tab-btn" onclick="switchPage('fav-page', event)">❤️ 我的收藏</button>
+    </div>
+
+    <div class="container">
+        <div id="words-page" class="page active"></div>
+        <div id="sentences-page" class="page"></div>
+        <div id="fav-page" class="page"><div id="fav-list"></div></div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 💾 終極大絕招：直接把你的教材資料儲存在網頁原始碼中！
+        // 這樣可以完全避開 Google 帳號的所有安全限制，100% 成功。
+        // ==========================================
+        const rawData = [
+            { type: "單詞", hakka: "𠊎", pinyin: "ngaiˇ", chinese: "我", imageId: "1PItjkP72pFdXbAd_Rph_mQmPSxCGmJvh", audioId: "1PItjkP72pFdXbAd_Rph_mQmPSxCGmJvh" },
+            { type: "單詞", hakka: "汝", pinyin: "ngiˇ", chinese: "你", imageId: "", audioId: "" },
+            { type: "單詞", hakka: "食飽吂", pinyin: "shia báu mangˇ", chinese: "吃飽沒", imageId: "", audioId: "" },
+            { type: "句子", hakka: "人愛自強，火愛點亮", pinyin: "ngin oi id_ kiongˇ, fo oi id_ diamˋ liong+", chinese: "人要自我振作，火要點燃才會明亮", imageId: "", audioId: "" }
+        ];
+        // ==========================================
+
+        let wordsData = [];
+        let sentencesData = [];
+        let currentUserId = 'guest_user';
+        let favorites = [];
+
+        // 轉換為 Google Drive 檔案直連格式
+        const getDriveUrl = (id) => {
+            if (!id || id.trim() === "") {
+                return 'https://picsum.photos/200'; // 如果沒填 ID，顯示預設圖片
+            }
+            return `https://docs.google.com/uc?export=download&id=${id.trim()}`;
+        };
+
+        function initApp() {
+            wordsData = [];
+            sentencesData = [];
+
+            rawData.forEach((item, index) => {
+                const cleanItem = {
+                    id: 'rp_' + index + '_' + item.hakka,
+                    hakka: item.hakka,
+                    pinyin: item.pinyin,
+                    chinese: item.chinese,
+                    imageId: item.imageId,
+                    audioId: item.audioId
+                };
+                
+                if (item.type === '句子' || item.type === '諺語') {
+                    sentencesData.push(cleanItem);
+                } else {
+                    wordsData.push(cleanItem);
+                }
+            });
+            
+            loadFavorites();
+            renderAll();
+        }
+
+        function loadFavorites() {
+            favorites = JSON.parse(localStorage.getItem('hakka_favs_' + currentUserId)) || [];
+        }
+
+        function switchPage(pageId, event) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            event.target.classList.add('active');
+            if(pageId === 'fav-page') renderFavorites();
+        }
+
+        function playAudio(audioId) {
+            if(!audioId || audioId.trim() === "") return;
+            const audio = new Audio(getDriveUrl(audioId));
+            audio.play().catch(e => alert("播放失敗！請確認該音檔在雲端硬碟已開啟「知道連結的使用者皆可檢視」分享權限。"));
+        }
+
+        function toggleFav(id, event) {
+            event.stopPropagation();
+            const index = favorites.indexOf(id);
+            if (index > -1) favorites.splice(index, 1);
+            else favorites.push(id);
+            localStorage.setItem('hakka_favs_' + currentUserId, JSON.stringify(favorites));
+            renderAll();
+            if(document.getElementById('fav-page').classList.contains('active')) renderFavorites();
+        }
+
+        function createCardHtml(item) {
+            const isFav = favorites.includes(item.id) ? 'is-fav' : '';
+            return `
+                <div class="card" onclick="playAudio('${item.audioId}')">
+                    <span class="play-icon">🔊</span>
+                    <img class="card-img" src="${getDriveUrl(item.imageId)}" alt="${item.hakka}">
+                    <div class="card-info">
+                        <p class="card-hakka">${item.hakka}</p>
+                        <p class="card-pinyin">[ ${item.pinyin} ]</p>
+                        <p class="card-chinese">${item.chinese}</p>
+                    </div>
+                    <button class="fav-btn ${isFav}" onclick="toggleFav('${item.id}', event)">♥</button>
+                </div>
+            `;
+        }
+
+        function renderAll() {
+            document.getElementById('words-page').innerHTML = wordsData.map(item => createCardHtml(item)).join('');
+            document.getElementById('sentences-page').innerHTML = sentencesData.map(item => createCardHtml(item)).join('');
+        }
+
+        function renderFavorites() {
+            const favList = document.getElementById('fav-list');
+            const allData = [...wordsData, ...sentencesData];
+            const favItems = allData.filter(item => favorites.includes(item.id));
+            if(favItems.length === 0) {
+                favList.innerHTML = '<p class="empty-msg">目前沒有收藏喔！<br>點擊字卡右邊的 ♥ 就可以記下來了。</p>';
+            } else {
+                favList.innerHTML = favItems.map(item => createCardHtml(item)).join('');
+            }
+        }
+
+        function decodeJwt(token) {
+            try { return JSON.parse(window.atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))); } 
+            catch (e) { return null; }
+        }
+
+        function handleCredentialResponse(response) {
+            const profile = decodeJwt(response.credential);
+            if (profile) {
+                currentUserId = profile.sub;
+                document.getElementById('user-status').innerText = '😊 ' + profile.name;
+                if (profile.picture) {
+                    const avatar = document.getElementById('user-avatar');
+                    avatar.src = profile.picture;
+                    avatar.style.display = 'block';
+                }
+                document.getElementById('google-btn-wrapper').style.display = 'none';
+                document.getElementById('logout-btn').style.display = 'block';
+                loadFavorites();
+                renderAll();
+            }
+        }
+
+        function logoutAccount() {
+            currentUserId = 'guest_user';
+            document.getElementById('user-status').innerText = '👤 訪客模式 (收藏將記在本地平板)';
+            document.getElementById('user-avatar').style.display = 'none';
+            document.getElementById('google-btn-wrapper').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'none';
+            loadFavorites();
+            renderAll();
+            if(document.getElementById('fav-page').classList.contains('active')) renderFavorites();
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
