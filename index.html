@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>饒平客語學習樂園</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         :root {
             --primary: #1E88E5;         /* 兒童天空藍 */
             --primary-light: #E3F2FD;   /* 淺藍背景 */
             --primary-dark: #1565C0;    /* 深藍強調 */
-            --secondary: #00BCD4;       /* 亮藍綠（播放鈕） */
+            --secondary: #00BCD4;       /* 亮藍綠 */
             --bg: #F4F6F9;              /* 輕快底色 */
             --card-bg: #FFFFFF;
             --text: #333333;
+            --danger: #E53935;          /* 清除鈕的紅色 */
         }
         * { box-sizing: border-box; font-family: 'Arial', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 70px; }
@@ -21,9 +21,11 @@
         header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; text-align: center; padding: 20px 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         header h1 { margin: 0; font-size: 24px; letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
         
-        .account-bar { background-color: #E9EEF5; padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; border-bottom: 1px solid #D0D7DE; }
-        .user-profile { display: flex; align-items: center; gap: 8px; font-weight: bold; color: #444; }
-        .user-avatar { width: 28px; height: 28px; border-radius: 50%; border: 1px solid #CCC; display: none; }
+        /* 管理工具列：放置清除記憶按鈕 */
+        .control-bar { background-color: #E9EEF5; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; border-bottom: 1px solid #D0D7DE; }
+        .info-tips { font-weight: bold; color: #444; }
+        .clear-btn { background-color: var(--danger); color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .clear-btn:active { background-color: #C62828; }
         
         .tabs { display: flex; justify-content: space-around; background: white; border-bottom: 2px solid #E0E0E0; position: sticky; top: 0; z-index: 100; }
         .tab-btn { background: none; border: none; padding: 15px 10px; font-size: 16px; font-weight: bold; color: #666666; cursor: pointer; width: 100%; text-align: center; }
@@ -33,8 +35,9 @@
         .page { display: none; }
         .page.active { display: block; }
         
-        /* 字卡樣式：拿掉圖片，調整間距 */
-        .card { background: var(--card-bg); border-radius: 16px; padding: 18px 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); display: flex; align-items: center; position: relative; border: 2px solid #E3F2FD; cursor: pointer; }
+        .card { background: var(--card-bg); border-radius: 16px; padding: 18px 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); display: flex; align-items: center; position: relative; border: 2px solid #E3F2FD; cursor: pointer; transition: transform 0.1s; }
+        .card:active { transform: scale(0.98); }
+        
         .play-btn-box { background-color: var(--primary-light); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0; }
         .play-icon { font-size: 22px; color: var(--primary-dark); margin-left: 2px; }
         
@@ -43,10 +46,10 @@
         .card-pinyin { font-size: 14px; color: #666666; margin: 0 0 5px 0; font-family: monospace; }
         .card-chinese { font-size: 16px; color: #555555; margin: 0; }
         
-        .fav-btn { background: none; border: none; font-size: 30px; color: #E0E0E0; cursor: pointer; padding: 10px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 10; }
+        .fav-btn { background: none; border: none; font-size: 30px; color: #E0E0E0; cursor: pointer; padding: 10px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 10; transition: color 0.2s; }
         .fav-btn.is-fav { color: #FF4081; }
         
-        .empty-msg { text-align: center; color: #999; margin-top: 50px; font-size: 16px; }
+        .empty-msg { text-align: center; color: #999; margin-top: 50px; font-size: 16px; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -55,16 +58,9 @@
         <h1>饒平客語學習樂園 🎒</h1>
     </header>
 
-    <div class="account-bar">
-        <div class="user-profile">
-            <img id="user-avatar" class="user-avatar" src="" alt="avatar">
-            <span id="user-status">👤 訪客模式 (收藏將記在本地平板)</span>
-        </div>
-        <div id="google-btn-wrapper">
-            <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com" data-callback="handleCredentialResponse" data-auto_prompt="false"></div>
-            <div class="g_id_signin" data-type="standard" data-size="small" data-theme="filled_blue" data-shape="rectangular"></div>
-        </div>
-        <button id="logout-btn" onclick="logoutAccount()">登出</button>
+    <div class="control-bar">
+        <span class="info-tips">💡 學生更換使用前，請點擊右側 ➡️</span>
+        <button class="clear-btn" onclick="clearAllFavorites()">🧹 清除本次收藏</button>
     </div>
 
     <div class="tabs">
@@ -81,32 +77,19 @@
 
     <script>
         // ==========================================
-        // 💾 教材資料庫（已移除圖片欄位）
+        // 💾 教材資料庫（4個範例皆使用 Andy.mp3 方便測試）
         // ==========================================
         const rawData = [
-            { 
-                type: "單詞", 
-                hakka: "𠊎", 
-                pinyin: "ngaiˇ", 
-                chinese: "我", 
-                audioId: "Andy.mp3"   // 💡 這裡已經對應您上傳的 Andy.mp3 檔名
-            },
+            { type: "單詞", hakka: "𠊎", pinyin: "ngaiˇ", chinese: "我", audioId: "Andy.mp3" },
             { type: "單詞", hakka: "汝", pinyin: "ngiˇ", chinese: "你", audioId: "Andy.mp3" },
             { type: "單詞", hakka: "食飽吂", pinyin: "shia báu mangˇ", chinese: "吃飽沒", audioId: "Andy.mp3" },
-            { type: "句子", hakka: "人愛自強，火愛點亮", pinyin: "ngin oi id_ kiongˇ, fo oi id_ diamˋ liong+", chinese: "人要自我振作，火要點燃才會明亮", audioId: "Andy.mp3" }
+            { type: "句子", hakka: "人愛自強，火愛點亮", pinyin: "ngin oi id_ kiongˇ, fo oi id_ diamˋ liong+", audioId: "Andy.mp3" }
         ];
         // ==========================================
 
         let wordsData = [];
         let sentencesData = [];
-        let currentUserId = 'guest_user';
         let favorites = [];
-
-        // 直接讀取 GitHub 內部同目錄下的音檔
-        const getAudioUrl = (id) => {
-            if (!id || id.trim() === "") return '';
-            return id.trim(); 
-        };
 
         function initApp() {
             wordsData = [];
@@ -132,8 +115,9 @@
             renderAll();
         }
 
+        // 從平板本地空間載入收藏
         function loadFavorites() {
-            favorites = JSON.parse(localStorage.getItem('hakka_favs_' + currentUserId)) || [];
+            favorites = JSON.parse(localStorage.getItem('hakka_rotation_favs')) || [];
         }
 
         function switchPage(pageId, event) {
@@ -145,22 +129,35 @@
         }
 
         function playAudio(audioId) {
-            const url = getAudioUrl(audioId);
-            if(!url) return;
-            const audio = new Audio(url);
+            if(!audioId || audioId.trim() === "") return;
+            const audio = new Audio(audioId.trim());
             audio.play().catch(e => {
-                alert("🔊 播放失敗！請確認音檔 " + audioId + " 是否有確實上傳到 GitHub 的 hakka2 資料夾中，且大小寫完全一致（例如 Andy.mp3 與 andy.mp3 是不同的）。");
+                alert("🔊 播放失敗！\n請確認音檔【" + audioId + "】有沒有確實上傳到 GitHub，且檔名大小寫完全一致喔！");
             });
         }
 
         function toggleFav(id, event) {
-            event.stopPropagation();
+            event.stopPropagation(); // 防止觸發播音檔
             const index = favorites.indexOf(id);
-            if (index > -1) favorites.splice(index, 1);
-            else favorites.push(id);
-            localStorage.setItem('hakka_favs_' + currentUserId, JSON.stringify(favorites));
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(id);
+            }
+            localStorage.setItem('hakka_rotation_favs', JSON.stringify(favorites));
             renderAll();
             if(document.getElementById('fav-page').classList.contains('active')) renderFavorites();
+        }
+
+        // 一鍵清除所有收藏，方便下一位同學使用
+        function clearAllFavorites() {
+            if (confirm("確定要清除這台平板上的所有客語收藏紀錄嗎？\n(換下一位同學使用前請點選此按鈕)")) {
+                favorites = [];
+                localStorage.setItem('hakka_rotation_favs', JSON.stringify(favorites));
+                renderAll();
+                if(document.getElementById('fav-page').classList.contains('active')) renderFavorites();
+                alert("🧹 紀錄已完全清空！歡迎下一位同學使用。");
+            }
         }
 
         function createCardHtml(item) {
@@ -190,43 +187,10 @@
             const allData = [...wordsData, ...sentencesData];
             const favItems = allData.filter(item => favorites.includes(item.id));
             if(favItems.length === 0) {
-                favList.innerHTML = '<p class="empty-msg">目前沒有收藏喔！<br>點擊字卡右邊的 ♥ 就可以記下來了。</p>';
+                favList.innerHTML = '<p class="empty-msg">目前沒有收藏喔！<br>點擊字卡右邊的 ♥ 就可以加到我的收藏囉。</p>';
             } else {
                 favList.innerHTML = favItems.map(item => createCardHtml(item)).join('');
             }
-        }
-
-        function decodeJwt(token) {
-            try { return JSON.parse(window.atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))); } 
-            catch (e) { return null; }
-        }
-
-        function handleCredentialResponse(response) {
-            const profile = decodeJwt(response.credential);
-            if (profile) {
-                currentUserId = profile.sub;
-                document.getElementById('user-status').innerText = '😊 ' + profile.name;
-                if (profile.picture) {
-                    const avatar = document.getElementById('user-avatar');
-                    avatar.src = profile.picture;
-                    avatar.style.display = 'block';
-                }
-                document.getElementById('google-btn-wrapper').style.display = 'none';
-                document.getElementById('logout-btn').style.display = 'block';
-                loadFavorites();
-                renderAll();
-            }
-        }
-
-        function logoutAccount() {
-            currentUserId = 'guest_user';
-            document.getElementById('user-status').innerText = '👤 訪客模式 (收藏將記在本地平板)';
-            document.getElementById('user-avatar').style.display = 'none';
-            document.getElementById('google-btn-wrapper').style.display = 'block';
-            document.getElementById('logout-btn').style.display = 'none';
-            loadFavorites();
-            renderAll();
-            if(document.getElementById('fav-page').classList.contains('active')) renderFavorites();
         }
 
         initApp();
