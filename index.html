@@ -33,14 +33,16 @@
         .page { display: none; }
         .page.active { display: block; }
         
-        .card { background: var(--card-bg); border-radius: 16px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); display: flex; align-items: center; position: relative; border: 2px solid #E3F2FD; cursor: pointer; }
-        .card-img { width: 85px; height: 85px; border-radius: 12px; object-fit: cover; margin-right: 15px; background-color: #EEE; border: 1px solid #E0E0E0; }
-        .card-info { flex: 1; padding-right: 30px; }
-        .card-hakka { font-size: 22px; font-weight: bold; color: var(--primary-dark); margin: 0 0 5px 0; }
+        /* 字卡樣式：拿掉圖片，調整間距 */
+        .card { background: var(--card-bg); border-radius: 16px; padding: 18px 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); display: flex; align-items: center; position: relative; border: 2px solid #E3F2FD; cursor: pointer; }
+        .play-btn-box { background-color: var(--primary-light); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0; }
+        .play-icon { font-size: 22px; color: var(--primary-dark); margin-left: 2px; }
+        
+        .card-info { flex: 1; padding-right: 35px; }
+        .card-hakka { font-size: 24px; font-weight: bold; color: var(--primary-dark); margin: 0 0 5px 0; }
         .card-pinyin { font-size: 14px; color: #666666; margin: 0 0 5px 0; font-family: monospace; }
         .card-chinese { font-size: 16px; color: #555555; margin: 0; }
         
-        .play-icon { font-size: 26px; color: var(--secondary); margin-right: 12px; }
         .fav-btn { background: none; border: none; font-size: 30px; color: #E0E0E0; cursor: pointer; padding: 10px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 10; }
         .fav-btn.is-fav { color: #FF4081; }
         
@@ -79,14 +81,19 @@
 
     <script>
         // ==========================================
-        // 💾 終極大絕招：直接把你的教材資料儲存在網頁原始碼中！
-        // 這樣可以完全避開 Google 帳號的所有安全限制，100% 成功。
+        // 💾 教材資料庫（已移除圖片欄位）
         // ==========================================
         const rawData = [
-            { type: "單詞", hakka: "𠊎", pinyin: "ngaiˇ", chinese: "我", imageId: "1Mj3bpvKCQPBJ6MztHvs6IVNOx6GQ-N8k", audioId: "1PItjkP72pFdXbAd_Rph_mQmPSxCGmJvh" },
-            { type: "單詞", hakka: "汝", pinyin: "ngiˇ", chinese: "你", imageId: "1Mj3bpvKCQPBJ6MztHvs6IVNOx6GQ-N8k", audioId: "1PItjkP72pFdXbAd_Rph_mQmPSxCGmJvh" },
-            { type: "單詞", hakka: "食飽吂", pinyin: "shia báu mangˇ", chinese: "吃飽沒", imageId: "1Mj3bpvKCQPBJ6MztHvs6IVNOx6GQ-N8k", audioId: "1PItjkP72pFdXbAd_Rph_mQmPSxCGmJvh" },
-            { type: "句子", hakka: "人愛自強，火愛點亮", pinyin: "ngin oi id_ kiongˇ, fo oi id_ diamˋ liong+", chinese: "人要自我振作，火要點燃才會明亮", imageId: "1Mj3bpvKCQPBJ6MztHvs6IVNOx6GQ-N8k", audioId: "1PItjkP72pFdXbAd_Rph_mQmPSxCGmJvh" }
+            { 
+                type: "單詞", 
+                hakka: "𠊎", 
+                pinyin: "ngaiˇ", 
+                chinese: "我", 
+                audioId: "Andy.mp3"   // 💡 這裡已經對應您上傳的 Andy.mp3 檔名
+            },
+            { type: "單詞", hakka: "汝", pinyin: "ngiˇ", chinese: "你", audioId: "" },
+            { type: "單詞", hakka: "食飽吂", pinyin: "shia báu mangˇ", chinese: "吃飽沒", audioId: "" },
+            { type: "句子", hakka: "人愛自強，火愛點亮", pinyin: "ngin oi id_ kiongˇ, fo oi id_ diamˋ liong+", chinese: "人要自我振作，火要點燃才會明亮", audioId: "" }
         ];
         // ==========================================
 
@@ -95,12 +102,10 @@
         let currentUserId = 'guest_user';
         let favorites = [];
 
-        // 轉換為 Google Drive 檔案直連格式
-        const getDriveUrl = (id) => {
-            if (!id || id.trim() === "") {
-                return 'https://picsum.photos/200'; // 如果沒填 ID，顯示預設圖片
-            }
-            return `https://docs.google.com/uc?export=download&id=${id.trim()}`;
+        // 直接讀取 GitHub 內部同目錄下的音檔
+        const getAudioUrl = (id) => {
+            if (!id || id.trim() === "") return '';
+            return id.trim(); 
         };
 
         function initApp() {
@@ -113,7 +118,6 @@
                     hakka: item.hakka,
                     pinyin: item.pinyin,
                     chinese: item.chinese,
-                    imageId: item.imageId,
                     audioId: item.audioId
                 };
                 
@@ -141,9 +145,12 @@
         }
 
         function playAudio(audioId) {
-            if(!audioId || audioId.trim() === "") return;
-            const audio = new Audio(getDriveUrl(audioId));
-            audio.play().catch(e => alert("播放失敗！請確認該音檔在雲端硬碟已開啟「知道連結的使用者皆可檢視」分享權限。"));
+            const url = getAudioUrl(audioId);
+            if(!url) return;
+            const audio = new Audio(url);
+            audio.play().catch(e => {
+                alert("🔊 播放失敗！請確認音檔 " + audioId + " 是否有確實上傳到 GitHub 的 hakka2 資料夾中，且大小寫完全一致（例如 Andy.mp3 與 andy.mp3 是不同的）。");
+            });
         }
 
         function toggleFav(id, event) {
@@ -160,8 +167,9 @@
             const isFav = favorites.includes(item.id) ? 'is-fav' : '';
             return `
                 <div class="card" onclick="playAudio('${item.audioId}')">
-                    <span class="play-icon">🔊</span>
-                    <img class="card-img" src="${getDriveUrl(item.imageId)}" alt="${item.hakka}">
+                    <div class="play-btn-box">
+                        <span class="play-icon">▶️</span>
+                    </div>
                     <div class="card-info">
                         <p class="card-hakka">${item.hakka}</p>
                         <p class="card-pinyin">[ ${item.pinyin} ]</p>
