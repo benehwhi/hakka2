@@ -3,64 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>饒平客語學習樂園</title>
+    <title>饒平客語學習樂園 - 第一課</title>
     <style>
         :root {
-            --primary: #1E88E5;         /* 兒童天空藍 */
-            --primary-light: #E3F2FD;   /* 淺藍背景 */
-            --primary-dark: #1565C0;    /* 深藍強調 */
-            --secondary: #00BCD4;       /* 亮藍綠 */
-            --bg: #F4F6F9;              /* 輕快底色 */
+            --primary: #1E88E5;         /* 第一課：藍色 */
+            --primary-light: #E3F2FD;   
+            --primary-dark: #1565C0;    
+            --bg: #F4F6F9;              
             --card-bg: #FFFFFF;
             --text: #333333;
-            --danger: #E53935;          /* 清除鈕的紅色 */
+            --danger: #E53935;          
         }
         * { box-sizing: border-box; font-family: 'Arial', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 70px; }
-        
         header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; text-align: center; padding: 20px 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         header h1 { margin: 0; font-size: 24px; letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
         
-        /* 管理工具列：放置清除記憶按鈕 */
+        /* 管理工具列 */
         .control-bar { background-color: #E9EEF5; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; border-bottom: 1px solid #D0D7DE; }
-        .info-tips { font-weight: bold; color: #444; }
-        .clear-btn { background-color: var(--danger); color: white; border: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .back-btn { background-color: #555555; color: white; text-decoration: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .back-btn:active { background-color: #333333; }
+        .clear-btn { background-color: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .clear-btn:active { background-color: #C62828; }
         
         .tabs { display: flex; justify-content: space-around; background: white; border-bottom: 2px solid #E0E0E0; position: sticky; top: 0; z-index: 100; }
         .tab-btn { background: none; border: none; padding: 15px 10px; font-size: 16px; font-weight: bold; color: #666666; cursor: pointer; width: 100%; text-align: center; }
         .tab-btn.active { color: var(--primary-dark); border-bottom: 4px solid var(--primary-dark); background-color: var(--primary-light); }
-        
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
         .page { display: none; }
         .page.active { display: block; }
-        
-        .card { background: var(--card-bg); border-radius: 16px; padding: 18px 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); display: flex; align-items: center; position: relative; border: 2px solid #E3F2FD; cursor: pointer; transition: transform 0.1s; }
+        .card { background: var(--card-bg); border-radius: 16px; padding: 18px 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); display: flex; align-items: center; position: relative; border: 2px solid var(--primary-light); cursor: pointer; transition: transform 0.1s; }
         .card:active { transform: scale(0.98); }
-        
         .play-btn-box { background-color: var(--primary-light); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0; }
         .play-icon { font-size: 22px; color: var(--primary-dark); margin-left: 2px; }
-        
         .card-info { flex: 1; padding-right: 35px; }
         .card-hakka { font-size: 24px; font-weight: bold; color: var(--primary-dark); margin: 0 0 5px 0; }
         .card-pinyin { font-size: 14px; color: #666666; margin: 0 0 5px 0; font-family: monospace; }
         .card-chinese { font-size: 16px; color: #555555; margin: 0; }
-        
-        .fav-btn { background: none; border: none; font-size: 30px; color: #E0E0E0; cursor: pointer; padding: 10px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 10; transition: color 0.2s; }
+        .fav-btn { background: none; border: none; font-size: 30px; color: #E0E0E0; cursor: pointer; padding: 10px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 10; }
         .fav-btn.is-fav { color: #FF4081; }
-        
         .empty-msg { text-align: center; color: #999; margin-top: 50px; font-size: 16px; line-height: 1.6; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>饒平客語學習樂園 🎒</h1>
+        <h1>饒平客語學習樂園 🎒 (第一課)</h1>
     </header>
 
     <div class="control-bar">
-        <span class="info-tips">💡 學生更換使用前，請點擊右側 ➡️</span>
-        <button class="clear-btn" onclick="clearAllFavorites()">🧹 清除本次收藏</button>
+        <a href="index.html" class="back-btn">⬅️ 返回總目錄</a>
+        <button class="clear-btn" onclick="clearAllFavorites()">🧹 清除第一課收藏</button>
     </div>
 
     <div class="tabs">
@@ -77,13 +70,13 @@
 
     <script>
         // ==========================================
-        // 💾 教材資料庫（4個範例皆使用 Andy.mp3 方便測試）
+        // 💾 第一課教材內容
         // ==========================================
         const rawData = [
             { type: "單詞", hakka: "𠊎", pinyin: "ngaiˇ", chinese: "我", audioId: "Andy.mp3" },
             { type: "單詞", hakka: "汝", pinyin: "ngiˇ", chinese: "你", audioId: "Andy.mp3" },
             { type: "單詞", hakka: "食飽吂", pinyin: "shia báu mangˇ", chinese: "吃飽沒", audioId: "Andy.mp3" },
-            { type: "句子", hakka: "人愛自強，火愛點亮", pinyin: "ngin oi id_ kiongˇ, fo oi id_ diamˋ liong+", audioId: "Andy.mp3" }
+            { type: "句子", hakka: "人愛自強，火愛點亮", pinyin: "ngin oi id_ kiongˇ, fo oi id_ diamˋ liong+", chinese: "人要自我振作，火要點燃才會明亮", audioId: "Andy.mp3" }
         ];
         // ==========================================
 
@@ -91,33 +84,32 @@
         let sentencesData = [];
         let favorites = [];
 
+        // 獨立的記憶體標籤，確保第一課收藏獨立
+        const STORAGE_KEY = 'hakka_favs_lesson1';
+
         function initApp() {
             wordsData = [];
             sentencesData = [];
-
             rawData.forEach((item, index) => {
                 const cleanItem = {
-                    id: 'rp_' + index + '_' + item.hakka,
+                    id: 'rp_l1_' + index + '_' + item.hakka,
                     hakka: item.hakka,
                     pinyin: item.pinyin,
                     chinese: item.chinese,
                     audioId: item.audioId
                 };
-                
                 if (item.type === '句子' || item.type === '諺語') {
                     sentencesData.push(cleanItem);
                 } else {
                     wordsData.push(cleanItem);
                 }
             });
-            
             loadFavorites();
             renderAll();
         }
 
-        // 從平板本地空間載入收藏
         function loadFavorites() {
-            favorites = JSON.parse(localStorage.getItem('hakka_rotation_favs')) || [];
+            favorites = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
         }
 
         function switchPage(pageId, event) {
@@ -132,31 +124,30 @@
             if(!audioId || audioId.trim() === "") return;
             const audio = new Audio(audioId.trim());
             audio.play().catch(e => {
-                alert("🔊 播放失敗！\n請確認音檔【" + audioId + "】有沒有確實上傳到 GitHub，且檔名大小寫完全一致喔！");
+                alert("🔊 播放失敗！\n請確認音檔【" + audioId + "】是否有上傳。");
             });
         }
 
         function toggleFav(id, event) {
-            event.stopPropagation(); // 防止觸發播音檔
+            event.stopPropagation();
             const index = favorites.indexOf(id);
             if (index > -1) {
                 favorites.splice(index, 1);
             } else {
                 favorites.push(id);
             }
-            localStorage.setItem('hakka_rotation_favs', JSON.stringify(favorites));
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
             renderAll();
             if(document.getElementById('fav-page').classList.contains('active')) renderFavorites();
         }
 
-        // 一鍵清除所有收藏，方便下一位同學使用
         function clearAllFavorites() {
-            if (confirm("確定要清除這台平板上的所有客語收藏紀錄嗎？\n(換下一位同學使用前請點選此按鈕)")) {
+            if (confirm("確定要清除第一課的客語收藏紀錄嗎？")) {
                 favorites = [];
-                localStorage.setItem('hakka_rotation_favs', JSON.stringify(favorites));
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
                 renderAll();
                 if(document.getElementById('fav-page').classList.contains('active')) renderFavorites();
-                alert("🧹 紀錄已完全清空！歡迎下一位同學使用。");
+                alert("🧹 第一課紀錄已清空！");
             }
         }
 
