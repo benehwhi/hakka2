@@ -92,9 +92,11 @@
 
         let wordsData = [];
         let sentencesData = [];
-        // 修正點 3：新增儲存「我會念」資料的陣列
         let readData = []; 
         let favorites = [];
+        
+        // 用來記錄目前正在播放的聲音物件，確保切換時能中斷舊聲音
+        let currentAudio = null;
 
         // 獨立的記憶體標籤，確保第一課收藏獨立
         const STORAGE_KEY = 'hakka_favs_lesson1';
@@ -102,7 +104,7 @@
         function initApp() {
             wordsData = [];
             sentencesData = [];
-            readData = []; // 新增：初始化清空
+            readData = []; 
             rawData.forEach((item, index) => {
                 const cleanItem = {
                     id: 'rp_l1_' + index + '_' + item.hakka,
@@ -112,7 +114,6 @@
                     audioId: item.audioId
                 };
                 
-                // 修正點 4：調整分類判斷邏輯
                 if (item.type === '我會念') {
                     readData.push(cleanItem);
                 } else if (item.type === '句子' || item.type === '諺語') {
@@ -139,8 +140,17 @@
 
         function playAudio(audioId) {
             if(!audioId || audioId.trim() === "") return;
-            const audio = new Audio(audioId.trim());
-            audio.play().catch(e => {
+            
+            // 如果目前有舊聲音正在撥，先將它暫停並重設時間
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+
+            // 建立新的聲音物件，並存入全域變數
+            currentAudio = new Audio(audioId.trim());
+            
+            currentAudio.play().catch(e => {
                 alert("🔊 播放失敗！\n請確認音檔【" + audioId + "】是否有上傳。");
             });
         }
@@ -188,13 +198,11 @@
         function renderAll() {
             document.getElementById('words-page').innerHTML = wordsData.map(item => createCardHtml(item)).join('');
             document.getElementById('sentences-page').innerHTML = sentencesData.map(item => createCardHtml(item)).join('');
-            // 修正點 5：渲染「我會念」頁面
             document.getElementById('read-page').innerHTML = readData.map(item => createCardHtml(item)).join('');
         }
 
         function renderFavorites() {
             const favList = document.getElementById('fav-list');
-            // 修正點 6：將 readData 合併，確保能收藏「我會念」裡面的字卡
             const allData = [...wordsData, ...sentencesData, ...readData];
             const favItems = allData.filter(item => favorites.includes(item.id));
             if(favItems.length === 0) {
