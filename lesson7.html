@@ -6,7 +6,7 @@
     <title>卓蘭饒平客語學習樂園 - 第七課</title>
     <style>
         :root {
-            --primary: #3F51B5;         /* 第七課：靛藍 */
+            --primary: #3F51B5;         /* 第七課：深藍色 */
             --primary-light: #E8EAF6;   
             --primary-dark: #303F9F;    
             --bg: #F4F6F9;              
@@ -20,14 +20,17 @@
         header h1 { margin: 0; font-size: 24px; letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
         .control-bar { background-color: #E9EEF5; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; border-bottom: 1px solid #D0D7DE; }
         .back-btn { background-color: #555555; color: white; text-decoration: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .back-btn:active { background-color: #333333; }
         .clear-btn { background-color: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .clear-btn:active { background-color: #C62828; }
         .tabs { display: flex; justify-content: space-around; background: white; border-bottom: 2px solid #E0E0E0; position: sticky; top: 0; z-index: 100; }
         .tab-btn { background: none; border: none; padding: 15px 10px; font-size: 16px; font-weight: bold; color: #666666; cursor: pointer; width: 100%; text-align: center; }
         .tab-btn.active { color: var(--primary-dark); border-bottom: 4px solid var(--primary-dark); background-color: var(--primary-light); }
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
         .page { display: none; }
         .page.active { display: block; }
-        .card { background: var(--card-bg); border-radius: 16px; padding: 18px 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); display: flex; align-items: center; position: relative; border: 2px solid var(--primary-light); cursor: pointer; }
+        .card { background: var(--card-bg); border-radius: 16px; padding: 18px 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); display: flex; align-items: center; position: relative; border: 2px solid var(--primary-light); cursor: pointer; transition: transform 0.1s; }
+        .card:active { transform: scale(0.98); }
         .play-btn-box { background-color: var(--primary-light); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0; }
         .play-icon { font-size: 22px; color: var(--primary-dark); margin-left: 2px; }
         .card-info { flex: 1; padding-right: 35px; }
@@ -40,7 +43,9 @@
     </style>
 </head>
 <body>
-    <header><h1>卓蘭饒平客語學習樂園 🌌 (第七課)</h1></header>
+    <header>
+        <h1>卓蘭饒平客語學習樂園 🌌 (第七課)</h1>
+    </header>
     <div class="control-bar">
         <a href="https://benehwhi.github.io/hakka2/" class="back-btn">⬅️ 返回總目錄</a>
         <button class="clear-btn" onclick="clearAllFavorites()">🧹 清除第七課收藏</button>
@@ -48,26 +53,40 @@
     <div class="tabs">
         <button class="tab-btn active" onclick="switchPage('words-page', event)">🔤 單詞</button>
         <button class="tab-btn" onclick="switchPage('sentences-page', event)">💬 諺語</button>
-        <button class="tab-btn" onclick="switchPage('sentences-page', event)">👄 我會念</button>
+        <button class="tab-btn" onclick="switchPage('read-page', event)">👄 我會念</button>
         <button class="tab-btn" onclick="switchPage('fav-page', event)">❤️ 我的收藏</button>
     </div>
     <div class="container">
         <div id="words-page" class="page active"></div>
         <div id="sentences-page" class="page"></div>
+        <div id="read-page" class="page"></div>
         <div id="fav-page" class="page"><div id="fav-list"></div></div>
     </div>
     <script>
         const rawData = [
-            { type: "單詞", hakka: "面帕", pinyin: "mien+ pha+", chinese: "毛巾", audioId: "Andy.mp3" },
-            { type: "單詞", hakka: "洗面", pinyin: "seˋ mien+", chinese: "洗臉", audioId: "Andy.mp3" },
-            { type: "句子", hakka: "好客親切人人愛", pinyin: "hauˋ hag_ cin_ qied_ nginˇ nginˇ oi+", chinese: "親切好客的人，大家都喜歡", audioId: "Andy.mp3" }
+            { type: "單詞", hakka: "還沒", pinyin: "還沒", chinese: "打噴嚏", audioId: "打噴嚏.mp3" },
+{ type: "單詞", hakka: "還沒", pinyin: "還沒", chinese: "皮塞", audioId: "皮塞.mp3" },
+{ type: "單詞", hakka: "還沒", pinyin: "還沒", chinese: "肚子痛", audioId: "肚子痛.mp3" },
+{ type: "單詞", hakka: "還沒", pinyin: "還沒", chinese: "咳嗽", audioId: "咳嗽.mp3" },
+{ type: "單詞", hakka: "還沒", pinyin: "還沒", chinese: "流鼻涕", audioId: "流鼻涕.mp3" },
+{ type: "單詞", hakka: "還沒", pinyin: "還沒", chinese: "喉嚨痛", audioId: "喉嚨痛.mp3" },
+{ type: "單詞", hakka: "還沒", pinyin: "還沒", chinese: "發燒", audioId: "發燒.mp3" },
+{ type: "單詞", hakka: "還沒", pinyin: "還沒", chinese: "頭痛", audioId: "頭痛.mp3" },
+{ type: "諺語", hakka: "還沒", pinyin: "還沒", chinese: "小孩子有耳無嘴", audioId: "7諺語.mp3" },
+{ type: "我會念", hakka: "還沒", pinyin: "還沒", chinese: "自己慢慢打", audioId: "7我會念.mp3" },
+
         ];
-        let wordsData = [], sentencesData = [], favorites = [];
+
+        let wordsData = []; let sentencesData = []; let readData = []; let favorites = []; let currentAudio = null;
         const STORAGE_KEY = 'hakka_favs_lesson7';
+
         function initApp() {
+            wordsData = []; sentencesData = []; readData = [];
             rawData.forEach((item, index) => {
-                const cleanItem = { id: 'rp_l7_'+index+'_'+item.hakka, hakka: item.hakka, pinyin: item.pinyin, chinese: item.chinese, audioId: item.audioId };
-                if (item.type === '句子' || item.type === '諺語') sentencesData.push(cleanItem); else wordsData.push(cleanItem);
+                const cleanItem = { id: 'rp_l7_' + index + '_' + item.hakka, hakka: item.hakka, pinyin: item.pinyin, chinese: item.chinese, audioId: item.audioId };
+                if (item.type === '我會念') { readData.push(cleanItem); }
+                else if (item.type === '句子' || item.type === '諺語') { sentencesData.push(cleanItem); }
+                else { wordsData.push(cleanItem); }
             });
             loadFavorites(); renderAll();
         }
@@ -78,18 +97,23 @@
             document.getElementById(pageId).classList.add('active'); event.target.classList.add('active');
             if(pageId === 'fav-page') renderFavorites();
         }
-        function playAudio(audioId) { if(audioId) new Audio(audioId.trim()).play().catch(e => alert("🔊 播音失敗")); }
+        function playAudio(audioId) {
+            if(!audioId || audioId.trim() === "") return;
+            if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
+            currentAudio = new Audio(audioId.trim());
+            currentAudio.play().catch(e => { alert("🔊 播放失敗！\n請確認音檔【" + audioId + "】是否有上傳。"); });
+        }
         function toggleFav(id, event) {
             event.stopPropagation(); const index = favorites.indexOf(id);
-            if (index > -1) favorites.splice(index, 1); else favorites.push(id);
+            if (index > -1) { favorites.splice(index, 1); } else { favorites.push(id); }
             localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites)); renderAll();
             if(document.getElementById('fav-page').classList.contains('active')) renderFavorites();
         }
         function clearAllFavorites() {
-            if (confirm("確定要清除第七課的紀錄嗎？")) {
+            if (confirm("確定要清除第七課的客語收藏紀錄嗎？")) {
                 favorites = []; localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites)); renderAll();
                 if(document.getElementById('fav-page').classList.contains('active')) renderFavorites();
-                alert("🧹 紀錄已清空！");
+                alert("🧹 第七課紀錄已清空！");
             }
         }
         function createCardHtml(item) {
@@ -99,10 +123,13 @@
         function renderAll() {
             document.getElementById('words-page').innerHTML = wordsData.map(item => createCardHtml(item)).join('');
             document.getElementById('sentences-page').innerHTML = sentencesData.map(item => createCardHtml(item)).join('');
+            document.getElementById('read-page').innerHTML = readData.map(item => createCardHtml(item)).join('');
         }
         function renderFavorites() {
-            const favList = document.getElementById('fav-list'); const allData = [...wordsData, ...sentencesData]; const favItems = allData.filter(item => favorites.includes(item.id));
-            if(favItems.length === 0) favList.innerHTML = '<p class="empty-msg">目前沒有收藏喔！</p>'; else favList.innerHTML = favItems.map(item => createCardHtml(item)).join('');
+            const favList = document.getElementById('fav-list'); const allData = [...wordsData, ...sentencesData, ...readData];
+            const favItems = allData.filter(item => favorites.includes(item.id));
+            if(favItems.length === 0) { favList.innerHTML = '<p class="empty-msg">目前沒有收藏喔！<br>點擊字卡右邊的 ♥ 就可以加到我的收藏囉。</p>'; }
+            else { favList.innerHTML = favItems.map(item => createCardHtml(item)).join(''); }
         }
         initApp();
     </script>
