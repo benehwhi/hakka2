@@ -59,13 +59,14 @@
     <div class="tabs">
         <button class="tab-btn active" onclick="switchPage('words-page', event)">🔤 單詞</button>
         <button class="tab-btn" onclick="switchPage('sentences-page', event)">💬 諺語</button>
-        <button class="tab-btn" onclick="switchPage('sentences-page', event)">👄 我會念</button>
+        <button class="tab-btn" onclick="switchPage('read-page', event)">👄 我會念</button>
         <button class="tab-btn" onclick="switchPage('fav-page', event)">❤️ 我的收藏</button>
     </div>
 
     <div class="container">
         <div id="words-page" class="page active"></div>
         <div id="sentences-page" class="page"></div>
+        <div id="read-page" class="page"></div>
         <div id="fav-page" class="page"><div id="fav-list"></div></div>
     </div>
 
@@ -91,6 +92,8 @@
 
         let wordsData = [];
         let sentencesData = [];
+        // 修正點 3：新增儲存「我會念」資料的陣列
+        let readData = []; 
         let favorites = [];
 
         // 獨立的記憶體標籤，確保第一課收藏獨立
@@ -99,6 +102,7 @@
         function initApp() {
             wordsData = [];
             sentencesData = [];
+            readData = []; // 新增：初始化清空
             rawData.forEach((item, index) => {
                 const cleanItem = {
                     id: 'rp_l1_' + index + '_' + item.hakka,
@@ -107,7 +111,11 @@
                     chinese: item.chinese,
                     audioId: item.audioId
                 };
-                if (item.type === '句子' || item.type === '諺語') {
+                
+                // 修正點 4：調整分類判斷邏輯
+                if (item.type === '我會念') {
+                    readData.push(cleanItem);
+                } else if (item.type === '句子' || item.type === '諺語') {
                     sentencesData.push(cleanItem);
                 } else {
                     wordsData.push(cleanItem);
@@ -180,11 +188,14 @@
         function renderAll() {
             document.getElementById('words-page').innerHTML = wordsData.map(item => createCardHtml(item)).join('');
             document.getElementById('sentences-page').innerHTML = sentencesData.map(item => createCardHtml(item)).join('');
+            // 修正點 5：渲染「我會念」頁面
+            document.getElementById('read-page').innerHTML = readData.map(item => createCardHtml(item)).join('');
         }
 
         function renderFavorites() {
             const favList = document.getElementById('fav-list');
-            const allData = [...wordsData, ...sentencesData];
+            // 修正點 6：將 readData 合併，確保能收藏「我會念」裡面的字卡
+            const allData = [...wordsData, ...sentencesData, ...readData];
             const favItems = allData.filter(item => favorites.includes(item.id));
             if(favItems.length === 0) {
                 favList.innerHTML = '<p class="empty-msg">目前沒有收藏喔！<br>點擊字卡右邊的 ♥ 就可以加到我的收藏囉。</p>';
