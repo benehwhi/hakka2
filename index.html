@@ -38,7 +38,7 @@
             background: linear-gradient(135deg, #4A90E2, #357ABD);
             color: white;
             text-align: center;
-            padding: 30px 15px;
+            padding: 30px 15px 24px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         header h1 {
@@ -46,16 +46,64 @@
             font-size: 28px;
             letter-spacing: 2px;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+            line-height: 1.35;
         }
         header p {
             margin: 10px 0 0 0;
             font-size: 15px;
-            opacity: 0.9;
+            opacity: 0.95;
+        }
+        .header-badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 14px;
+        }
+        .header-badges span {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
         }
         .container {
             padding: 15px;
-            max-width: 650px;
+            max-width: 720px;
             margin: 0 auto;
+        }
+        .intro-card {
+            background: linear-gradient(135deg, #ffffff, #f8fbff);
+            border-radius: 18px;
+            padding: 18px;
+            margin: 8px 0 18px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border: 1px solid #e5eef8;
+        }
+        .intro-card h2 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+            color: #1e4d73;
+        }
+        .intro-card p {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: #5f6f7a;
+            line-height: 1.6;
+        }
+        .intro-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .intro-tags span {
+            background: #eef6ff;
+            color: #2563eb;
+            padding: 5px 9px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
         }
         .lesson-link {
             text-decoration: none;
@@ -65,44 +113,46 @@
         }
         .lesson-card {
             background: var(--card-bg);
-            border-radius: 16px;
-            padding: 18px 15px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.04);
+            border-radius: 18px;
+            padding: 16px 14px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.05);
             display: flex;
             align-items: center;
             transition: transform 0.2s, box-shadow 0.2s;
             cursor: pointer;
+            border: 1px solid #edf2f7;
         }
         .lesson-card:active {
             transform: scale(0.98);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.04);
         }
         .lesson-icon {
-            font-size: 32px;
-            margin-right: 15px;
-            width: 50px;
-            height: 50px;
+            font-size: 30px;
+            margin-right: 12px;
+            width: 48px;
+            height: 48px;
             background-color: #F8FAFC;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            box-shadow: inset 0 0 0 1px #eef3f8;
         }
         .lesson-info {
             flex: 1;
         }
         .lesson-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: bold;
-            margin: 0 0 5px 0;
+            margin: 0 0 4px 0;
             color: #1A252F;
         }
         .lesson-desc {
             font-size: 13px;
             color: #7F8C8D;
             margin: 0;
-            line-height: 1.4;
+            line-height: 1.45;
         }
         .arrow-icon {
             font-size: 18px;
@@ -125,11 +175,25 @@
 <body>
 
     <header>
-        <h1>🎒 卓蘭饒平客語學習樂園</h1>
-        <p>點選下方課堂，開啟精彩的卓蘭饒平客話學習之旅！</p>
+        <h1>卓蘭饒平客語學習樂園</h1>
+        <p>從生活用語到日常對話，循序漸進學習卓蘭饒平客語。</p>
+        <div class="header-badges">
+            <span>📚 7堂課</span>
+            <span>🔊 發音互動</span>
+            <span>❤️ 收藏複習</span>
+        </div>
     </header>
 
     <div class="container">
+        <div class="intro-card">
+            <h2>📖 這是一個適合手機學習的客語教材</h2>
+            <p>每一課都以生活情境為主，搭配客語單字、諺語與朗讀內容，讓學習更自然、更容易上手。</p>
+            <div class="intro-tags">
+                <span>生活用語</span>
+                <span>客語發音</span>
+                <span>互動學習</span>
+            </div>
+        </div>
 
         <a href="lesson1.html" class="lesson-link">
             <div class="lesson-card" style="border-left: 8px solid #1E88E5;">

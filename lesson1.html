@@ -29,43 +29,58 @@
         }
         * { box-sizing: border-box; font-family: 'Arial', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 70px; }
-        header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; text-align: center; padding: 20px 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        header h1 { margin: 0; font-size: 24px; letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; text-align: center; padding: 20px 12px 18px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        header h1 { margin: 0; font-size: 24px; letter-spacing: 1.5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); line-height: 1.35; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+        header .title-line { display: block; }
+        header .header-subtitle { margin: 8px 0 0; font-size: 13px; opacity: 0.95; font-weight: 500; }
         
         /* 管理工具列 */
-        .control-bar { background-color: #E9EEF5; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; border-bottom: 1px solid #D0D7DE; }
+        .control-bar { background-color: #E9EEF5; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; border-bottom: 1px solid #D0D7DE; gap: 8px; flex-wrap: wrap; }
         .back-btn { background-color: #555555; color: white; text-decoration: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .back-btn:active { background-color: #333333; }
+        .control-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+        .control-btn { background-color: var(--primary); color: white; border: none; padding: 6px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .control-btn.secondary { background-color: #8E24AA; }
         .clear-btn { background-color: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .clear-btn:active { background-color: #C62828; }
         
-        .tabs { display: flex; justify-content: space-around; background: white; border-bottom: 2px solid #E0E0E0; position: sticky; top: 0; z-index: 100; }
-        .tab-btn { background: none; border: none; padding: 15px 10px; font-size: 16px; font-weight: bold; color: #666666; cursor: pointer; width: 100%; text-align: center; }
+        .tabs { display: flex; justify-content: space-around; background: white; border-bottom: 2px solid #E0E0E0; position: sticky; top: 0; z-index: 100; padding: 0 6px; }
+        .tab-btn { background: none; border: none; padding: 13px 8px; font-size: 15px; font-weight: bold; color: #666666; cursor: pointer; width: 100%; text-align: center; border-radius: 10px 10px 0 0; }
         .tab-btn.active { color: var(--primary-dark); border-bottom: 4px solid var(--primary-dark); background-color: var(--primary-light); }
-        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
+        .container { padding: 14px; max-width: 640px; margin: 0 auto; }
+        .page-tip { background: rgba(255,255,255,0.88); border: 1px solid #e5edf7; border-radius: 14px; padding: 10px 12px; margin: 0 0 12px; font-size: 13px; color: #4b5b6b; line-height: 1.5; }
         .page { display: none; }
         .page.active { display: block; }
-        .card { background: var(--card-bg); border-radius: 16px; padding: 18px 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); display: flex; align-items: center; position: relative; border: 2px solid var(--primary-light); cursor: pointer; transition: transform 0.1s; }
+        .card { background: var(--card-bg); border-radius: 16px; padding: 14px 12px; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); display: flex; align-items: center; position: relative; border: 2px solid var(--primary-light); cursor: pointer; transition: transform 0.12s ease, box-shadow 0.12s ease; }
+        .card:hover { box-shadow: 0 6px 14px rgba(0,0,0,0.06); }
         .card:active { transform: scale(0.98); }
-        .play-btn-box { background-color: var(--primary-light); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0; }
-        .play-icon { font-size: 22px; color: var(--primary-dark); margin-left: 2px; }
-        .card-info { flex: 1; padding-right: 35px; }
-        .card-hakka { font-size: 24px; font-weight: bold; color: var(--primary-dark); margin: 0 0 5px 0; }
-        .card-pinyin { font-size: 14px; color: #666666; margin: 0 0 5px 0; font-family: monospace; }
-        .card-chinese { font-size: 16px; color: #555555; margin: 0; }
-        .fav-btn { background: none; border: none; font-size: 30px; color: #E0E0E0; cursor: pointer; padding: 10px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 10; }
+        .play-btn-box { background-color: var(--primary-light); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; }
+        .play-icon { font-size: 20px; color: var(--primary-dark); margin-left: 2px; }
+        .card-info { flex: 1; padding-right: 36px; }
+        .card-hakka { font-size: 22px; font-weight: bold; color: var(--primary-dark); margin: 0 0 4px 0; }
+        .card-pinyin { font-size: 13px; color: #666666; margin: 0 0 4px 0; font-family: monospace; }
+        .card-chinese { font-size: 15px; color: #555555; margin: 0; }
+        .fav-btn { background: none; border: none; font-size: 26px; color: #D0D7DE; cursor: pointer; padding: 8px; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); z-index: 10; }
         .fav-btn.is-fav { color: #FF4081; }
-        .empty-msg { text-align: center; color: #999; margin-top: 50px; font-size: 16px; line-height: 1.6; }
+        .empty-msg { text-align: center; color: #999; margin-top: 50px; font-size: 15px; line-height: 1.6; padding: 0 10px; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>卓蘭饒平客語學習樂園 🎒 (第一課)</h1>
+        <h1>
+            <span class="title-line">卓蘭饒平客語學習樂園</span>
+            <span class="title-line">🎒（第一課）</span>
+        </h1>
+        <p class="header-subtitle">認識身體部位，開始學習生活中的客語單字</p>
     </header>
 
     <div class="control-bar">
         <a href="https://benehwhi.github.io/hakka2/" class="back-btn">⬅️ 返回總目錄</a>
+        <div class="control-actions">
+            <button class="control-btn" onclick="playCurrentPage()">🔊 播放本頁</button>
+            <button class="control-btn secondary" onclick="stopPlayback()">⏹ 停止</button>
+        </div>
         <button class="clear-btn" onclick="clearAllFavorites()">🧹 清除第一課收藏</button>
     </div>
 
@@ -77,6 +92,7 @@
     </div>
 
     <div class="container">
+        <div class="page-tip">💡 提示：點選卡片即可播放；也可以使用上方「播放本頁」一次聽完。</div>
         <div id="words-page" class="page active"></div>
         <div id="sentences-page" class="page"></div>
         <div id="read-page" class="page"></div>
@@ -110,6 +126,8 @@
         
         // 用來記錄目前正在播放的聲音物件，確保切換時能中斷舊聲音
         let currentAudio = null;
+        let playbackQueue = [];
+        let playbackIndex = 0;
 
         // 獨立的記憶體標籤，確保第一課收藏獨立
         const STORAGE_KEY = 'hakka_favs_lesson1';
@@ -151,21 +169,64 @@
             if(pageId === 'fav-page') renderFavorites();
         }
 
-        function playAudio(audioId) {
-            if(!audioId || audioId.trim() === "") return;
-            
-            // 如果目前有舊聲音正在撥，先將它暫停並重設時間
+        function stopPlayback() {
             if (currentAudio) {
                 currentAudio.pause();
                 currentAudio.currentTime = 0;
             }
+            playbackQueue = [];
+            playbackIndex = 0;
+        }
 
-            // 建立新的聲音物件，並存入全域變數
+        function playAudio(audioId, onEnded = null) {
+            if(!audioId || audioId.trim() === "") return;
+
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                currentAudio.onended = null;
+            }
+
             currentAudio = new Audio(audioId.trim());
-            
+            if (onEnded) {
+                currentAudio.onended = onEnded;
+            }
+
             currentAudio.play().catch(e => {
-                alert("🔊 播放失敗！\n請確認音檔【" + audioId + "】是否有上傳。");
+                if (onEnded) onEnded();
+                alert("🔊 播放失敗！\n請確認音檔【" + audioId + "】是否有上傳。\n");
             });
+        }
+
+        function getActiveData() {
+            const activePage = document.querySelector('.page.active');
+            if (!activePage) return [];
+            if (activePage.id === 'words-page') return wordsData;
+            if (activePage.id === 'sentences-page') return sentencesData;
+            if (activePage.id === 'read-page') return readData;
+            return [];
+        }
+
+        function playCurrentPage() {
+            const items = getActiveData();
+            if (!items.length) return;
+            const validItems = items.filter(item => item.audioId && item.audioId.trim() !== "");
+            if (!validItems.length) return;
+
+            stopPlayback();
+            playbackQueue = validItems.map(item => item.audioId);
+            playbackIndex = 0;
+            const playNext = () => {
+                if (playbackIndex >= playbackQueue.length) {
+                    playbackQueue = [];
+                    playbackIndex = 0;
+                    return;
+                }
+                const nextAudio = playbackQueue[playbackIndex];
+                playbackIndex += 1;
+                playAudio(nextAudio, playNext);
+            };
+            playNext();
         }
 
         function toggleFav(id, event) {
