@@ -54,7 +54,7 @@
         .play-btn-box { background-color: var(--primary-light); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; }
         .play-icon { font-size: 20px; color: var(--primary-dark); margin-left: 2px; }
         .card-info { flex: 1; padding-right: 36px; }
-        .card-hakka { font-size: 22px; font-weight: bold; color: var(--primary-dark); margin: 0 0 4px 0; }
+        .card-hakka { font-size: 22px; font-weight: bold; color: var(--primary-dark); margin: 0 0 4px 0; line-height: 1.5; }
         .card-pinyin { font-size: 13px; color: #666666; margin: 0 0 4px 0; font-family: monospace; }
         .card-chinese { font-size: 15px; color: #555555; margin: 0; }
         .fav-btn { background: none; border: none; font-size: 26px; color: #D0D7DE; cursor: pointer; padding: 8px; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); z-index: 10; }
@@ -93,19 +93,18 @@
     </div>
     <script>
         const rawData = [
-          { type: "單詞", hakka: "紅色", pinyin: "fungˋ  sedˋ", chinese: "紅色", audioId: "紅色.mp3" },
-{ type: "單詞", hakka: "黃色", pinyin: "vongˋ  sedˋ", chinese: "黃色", audioId: "黃色.mp3" },
-{ type: "單詞", hakka: "青色", pinyin: "ciangˇ  sedˋ", chinese: "綠色", audioId: "綠色.mp3" },
-{ type: "單詞", hakka: "烏色", pinyin: "vuˇ  sedˋ", chinese: "黑色", audioId: "黑色.mp3" },
-{ type: "單詞", hakka: "白色", pinyin: " pag  sedˋ", chinese: "白色", audioId: "白色.mp3" },
-{ type: "單詞", hakka: "藍色", pinyin: "lamˋ  sedˋ", chinese: "藍色", audioId: "藍色.mp3" },
-{ type: "單詞", hakka: "柑色", pinyin: "gamˇ  sedˋ", chinese: "橘色", audioId: "橘色.mp3" },
-{ type: "單詞", hakka: "茄色 / 葡萄色", pinyin: "kiauˋ  sedˋ  /  puˋ  toˋ  sedˋ", chinese: "紫色", audioId: "紫色.mp3" },
-{ type: "單詞", hakka: "火灰色 / 老鼠色", pinyin: "fo^  foiˇ  sedˋ  /  lo^  cu^  sedˋ", chinese: "灰色", audioId: "灰色.mp3" },
-{ type: "單詞", hakka: "咖啡色 / 豬肝色", pinyin: "gaˇ  biˇ  sedˋ  /  zuˇ  gonˇ  sedˋ", chinese: "咖啡色", audioId: "咖啡色.mp3" },
-{ type: "諺語", hakka: "鳥狗偷食.白狗擋災", pinyin: "", chinese: "", audioId: "4諺語.mp3" },
-{ type: "我會念", hakka: "虹阿虹.恁靚个虹.虹啊虹七彩个虹.紅色柑色和黃色青色藍色靛茄色.彎彎吊在半天高.親像牛郎織女个拱橋.虹阿虹恁高个虹.𠊎想企在拱橋頂. 䀴看彩色滿天下", pinyin: "", chinese: "替人背黑鍋。", audioId: "4我會念.mp3" },
-
+            { type: "單詞", hakka: "紅色", pinyin: "fungˋ  sedˋ", chinese: "紅色", audioId: "紅色.mp3" },
+            { type: "單詞", hakka: "黃色", pinyin: "vongˋ  sedˋ", chinese: "黃色", audioId: "黃色.mp3" },
+            { type: "單詞", hakka: "青色", pinyin: "ciangˇ  sedˋ", chinese: "綠色", audioId: "綠色.mp3" },
+            { type: "單詞", hakka: "烏色", pinyin: "vuˇ  sedˋ", chinese: "黑色", audioId: "黑色.mp3" },
+            { type: "單詞", hakka: "白色", pinyin: "pag  sedˋ", chinese: "白色", audioId: "白色.mp3" },
+            { type: "單詞", hakka: "藍色", pinyin: "lamˋ  sedˋ", chinese: "藍色", audioId: "藍色.mp3" },
+            { type: "單詞", hakka: "柑色", pinyin: "gamˇ  sedˋ", chinese: "橘色", audioId: "橘色.mp3" },
+            { type: "單詞", hakka: "茄色 / 葡萄色", pinyin: "kiauˋ  sedˋ  /  puˋ  toˋ  sedˋ", chinese: "紫色", audioId: "紫色.mp3" },
+            { type: "單詞", hakka: "火灰色 / 老鼠色", pinyin: "fo^  foiˇ  sedˋ  /  lo^  cu^  sedˋ", chinese: "灰色", audioId: "灰色.mp3" },
+            { type: "單詞", hakka: "咖啡色 / 豬肝色", pinyin: "gaˇ  biˇ  sedˋ  /  zuˇ  gonˇ  sedˋ", chinese: "咖啡色", audioId: "咖啡色.mp3" },
+            { type: "諺語", hakka: "烏狗偷食，白狗擋災", pinyin: "", chinese: "替人背黑鍋。", audioId: "4諺語.mp3" },
+            { type: "我會念", hakka: "虹阿虹，恁靚个虹，<br>虹啊虹七彩个虹。<br>紅色柑色和黃色，<br>青色藍色靛茄色，<br>彎彎吊在半天高，<br>親像牛郎織女个拱橋。<br>虹阿虹恁高个虹，<br>𠊎想企在拱橋頂，<br>䀴看彩色滿天下。", pinyin: "", chinese: "", audioId: "4我會念.mp3" }
         ];
 
         let wordsData = []; let sentencesData = []; let readData = []; let favorites = []; let currentAudio = null; let playbackQueue = []; let playbackIndex = 0;
@@ -179,7 +178,22 @@
         }
         function createCardHtml(item) {
             const isFav = favorites.includes(item.id) ? 'is-fav' : '';
-            return `<div class="card" onclick="playAudio('${item.audioId}')"><div class="play-btn-box"><span class="play-icon">▶️</span></div><div class="card-info"><p class="card-hakka">${item.hakka}</p><p class="card-pinyin">[ ${item.pinyin} ]</p><p class="card-chinese">${item.chinese}</p></div><button class="fav-btn ${isFav}" onclick="toggleFav('${item.id}', event)">♥</button></div>`;
+            const pinyinHtml = item.pinyin && item.pinyin.trim() !== "" ? `<p class="card-pinyin">[ ${item.pinyin} ]</p>` : '';
+            const chineseHtml = item.chinese && item.chinese.trim() !== "" ? `<p class="card-chinese">${item.chinese}</p>` : '';
+
+            return `
+                <div class="card" onclick="playAudio('${item.audioId}')">
+                    <div class="play-btn-box">
+                        <span class="play-icon">▶️</span>
+                    </div>
+                    <div class="card-info">
+                        <p class="card-hakka">${item.hakka}</p>
+                        ${pinyinHtml}
+                        ${chineseHtml}
+                    </div>
+                    <button class="fav-btn ${isFav}" onclick="toggleFav('${item.id}', event)">♥</button>
+                </div>
+            `;
         }
         function renderAll() {
             document.getElementById('words-page').innerHTML = wordsData.map(item => createCardHtml(item)).join('');
