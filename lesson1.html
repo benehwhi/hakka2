@@ -57,7 +57,7 @@
         .play-btn-box { background-color: var(--primary-light); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; }
         .play-icon { font-size: 20px; color: var(--primary-dark); margin-left: 2px; }
         .card-info { flex: 1; padding-right: 36px; }
-        .card-hakka { font-size: 22px; font-weight: bold; color: var(--primary-dark); margin: 0 0 4px 0; }
+        .card-hakka { font-size: 22px; font-weight: bold; color: var(--primary-dark); margin: 0 0 4px 0; line-height: 1.5; }
         .card-pinyin { font-size: 13px; color: #666666; margin: 0 0 4px 0; font-family: monospace; }
         .card-chinese { font-size: 15px; color: #555555; margin: 0; }
         .fav-btn { background: none; border: none; font-size: 26px; color: #D0D7DE; cursor: pointer; padding: 8px; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); z-index: 10; }
@@ -105,17 +105,17 @@
         // ==========================================
         const rawData = [
             { type: "單詞", hakka: "頭那", pinyin: "teuˋ  naˋ", chinese: "頭", audioId: "頭.mp3" },
-{ type: "單詞", hakka: "頭毛", pinyin: "teuˋ  moˇ", chinese: "頭髮", audioId: "頭髮.mp3" },
-{ type: "單詞", hakka: "目珠", pinyin: "mugˋ  ziuˇ", chinese: "眼睛", audioId: "眼睛.mp3" },
-{ type: "單詞", hakka: "耳公", pinyin: "ngi^  gungˇ", chinese: "耳朵", audioId: "耳朵.mp3" },
-{ type: "單詞", hakka: "鼻公", pinyin: "piˋ  gungˇ", chinese: "鼻子", audioId: "鼻子.mp3" },
-{ type: "單詞", hakka: "嘴", pinyin: "ze^", chinese: "嘴巴", audioId: "嘴巴.mp3" },
-{ type: "單詞", hakka: "肚屎", pinyin: "du^  si^", chinese: "肚子", audioId: "肚子.mp3" },
-{ type: "單詞", hakka: "屎胐", pinyin: "si^  vudˋ", chinese: "屁股", audioId: "屁股.mp3" },
-{ type: "單詞", hakka: "手", pinyin: "siu^", chinese: "手", audioId: "手.mp3" },
-{ type: "單詞", hakka: "腳", pinyin: "giogˋ", chinese: "腳", audioId: "腳.mp3" },
-{ type: "諺語", hakka: "細子人有耳無嘴", pinyin: "", chinese: "大人講話時，小孩子不插嘴。", audioId: "7諺語.mp3" },
-{ type: "我會念", hakka: "大家來運動.頭那頭那頷啊頷.擎起雙手拍啊拍.正腳左腳跳跳跳.肚屎肚屎扭啊扭.逐日運動十分鐘.身體康健十百二", pinyin: "", chinese: "", audioId: "7我會念.mp3" },
+            { type: "單詞", hakka: "頭毛", pinyin: "teuˋ  moˇ", chinese: "頭髮", audioId: "頭髮.mp3" },
+            { type: "單詞", hakka: "目珠", pinyin: "mugˋ  ziuˇ", chinese: "眼睛", audioId: "眼睛.mp3" },
+            { type: "單詞", hakka: "耳公", pinyin: "ngi^  gungˇ", chinese: "耳朵", audioId: "耳朵.mp3" },
+            { type: "單詞", hakka: "鼻公", pinyin: "piˋ  gungˇ", chinese: "鼻子", audioId: "鼻子.mp3" },
+            { type: "單詞", hakka: "嘴", pinyin: "ze^", chinese: "嘴巴", audioId: "嘴巴.mp3" },
+            { type: "單詞", hakka: "肚屎", pinyin: "du^  si^", chinese: "肚子", audioId: "肚子.mp3" },
+            { type: "單詞", hakka: "屎胐", pinyin: "si^  vudˋ", chinese: "屁股", audioId: "屁股.mp3" },
+            { type: "單詞", hakka: "手", pinyin: "siu^", chinese: "手", audioId: "手.mp3" },
+            { type: "單詞", hakka: "腳", pinyin: "giogˋ", chinese: "腳", audioId: "腳.mp3" },
+            { type: "諺語", hakka: "細子人有耳無嘴", pinyin: "", chinese: "大人講話時，小孩子不插嘴。", audioId: "7諺語.mp3" },
+            { type: "我會念", hakka: "大家來運動，<br>頭那頭那頷啊頷，<br>擎起雙手拍啊拍，<br>正腳左腳跳跳跳，<br>肚屎肚屎扭啊扭，<br>逐日運動十分鐘，<br>身體康健十百二。", pinyin: "", chinese: "", audioId: "7我會念.mp3" },
         ];
         // ==========================================
 
@@ -254,6 +254,9 @@
 
         function createCardHtml(item) {
             const isFav = favorites.includes(item.id) ? 'is-fav' : '';
+            const pinyinHtml = item.pinyin && item.pinyin.trim() !== "" ? `<p class="card-pinyin">[ ${item.pinyin} ]</p>` : '';
+            const chineseHtml = item.chinese && item.chinese.trim() !== "" ? `<p class="card-chinese">${item.chinese}</p>` : '';
+            
             return `
                 <div class="card" onclick="playAudio('${item.audioId}')">
                     <div class="play-btn-box">
@@ -261,8 +264,8 @@
                     </div>
                     <div class="card-info">
                         <p class="card-hakka">${item.hakka}</p>
-                        <p class="card-pinyin">[ ${item.pinyin} ]</p>
-                        <p class="card-chinese">${item.chinese}</p>
+                        ${pinyinHtml}
+                        ${chineseHtml}
                     </div>
                     <button class="fav-btn ${isFav}" onclick="toggleFav('${item.id}', event)">♥</button>
                 </div>
