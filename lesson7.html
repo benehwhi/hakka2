@@ -54,7 +54,7 @@
         .play-btn-box { background-color: var(--primary-light); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; }
         .play-icon { font-size: 20px; color: var(--primary-dark); margin-left: 2px; }
         .card-info { flex: 1; padding-right: 36px; }
-        .card-hakka { font-size: 22px; font-weight: bold; color: var(--primary-dark); margin: 0 0 4px 0; }
+        .card-hakka { font-size: 22px; font-weight: bold; color: var(--primary-dark); margin: 0 0 4px 0; line-height: 1.5; }
         .card-pinyin { font-size: 13px; color: #666666; margin: 0 0 4px 0; font-family: monospace; }
         .card-chinese { font-size: 15px; color: #555555; margin: 0; }
         .fav-btn { background: none; border: none; font-size: 26px; color: #D0D7DE; cursor: pointer; padding: 8px; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); z-index: 10; }
@@ -93,17 +93,16 @@
     </div>
     <script>
         const rawData = [
-           { type: "單詞", hakka: "打哈啾", pinyin: "da^  ha  ciuˋ", chinese: "打噴嚏", audioId: "打噴嚏.mp3" },
-{ type: "單詞", hakka: "頭那疾", pinyin: "teuˋ  naˋ  cid", chinese: "頭痛", audioId: "頭痛.mp3" },
-{ type: "單詞", hakka: "肚屎疾", pinyin: "du^  si^  cid", chinese: "肚子痛", audioId: "肚子痛.mp3" },
-{ type: "單詞", hakka: "喉嗹疾", pinyin: "heuˋ  lenˋ  cid", chinese: "喉嚨痛", audioId: "喉嚨痛.mp3" },
-{ type: "單詞", hakka: "流鼻水", pinyin: "lauˋ  pi  fi^", chinese: "流鼻涕", audioId: "流鼻涕.mp3" },
-{ type: "單詞", hakka: "發燒", pinyin: "fadˋ  sauˇ ", chinese: "發燒", audioId: "發燒.mp3" },
-{ type: "單詞", hakka: "塞鼻", pinyin: "sedˋ  pi", chinese: "鼻塞", audioId: "鼻塞.mp3" },
-{ type: "單詞", hakka: "嗽", pinyin: "cug", chinese: "咳嗽", audioId: "咳嗽.mp3" },
-{ type: "諺語", hakka: "囥酒會醇.囥病會重", pinyin: "", chinese: "", audioId: "1諺語.mp3" },
-{ type: "我會念", hakka: "寒著咧!寒著會打哈啾.寒著會頭那疾.還會發燒流鼻水.寒著會嗽喉嗹疾.愛較緊去看醫生.食藥歇睏正會好", pinyin: "", chinese: "酒放久了越陳越香，疾病拖久了卻會越來越嚴重。", audioId: "1我會念.mp3" },
-
+            { type: "單詞", hakka: "打哈啾", pinyin: "da^  ha  ciuˋ", chinese: "打噴嚏", audioId: "打噴嚏.mp3" },
+            { type: "單詞", hakka: "頭那疾", pinyin: "teuˋ  naˋ  cid", chinese: "頭痛", audioId: "頭痛.mp3" },
+            { type: "單詞", hakka: "肚屎疾", pinyin: "du^  si^  cid", chinese: "肚子痛", audioId: "肚子痛.mp3" },
+            { type: "單詞", hakka: "喉嗹疾", pinyin: "heuˋ  lenˋ  cid", chinese: "喉嚨痛", audioId: "喉嚨痛.mp3" },
+            { type: "單詞", hakka: "流鼻水", pinyin: "lauˋ  pi  fi^", chinese: "流鼻涕", audioId: "流鼻涕.mp3" },
+            { type: "單詞", hakka: "發燒", pinyin: "fadˋ  sauˇ", chinese: "發燒", audioId: "發燒.mp3" },
+            { type: "單詞", hakka: "塞鼻", pinyin: "sedˋ  pi", chinese: "鼻塞", audioId: "鼻塞.mp3" },
+            { type: "單詞", hakka: "嗽", pinyin: "cug", chinese: "咳嗽", audioId: "咳嗽.mp3" },
+            { type: "諺語", hakka: "囥酒會醇，囥病會重", pinyin: "", chinese: "酒放久了越陳越香，疾病拖久了卻會越來越嚴重。", audioId: "1諺語.mp3" },
+            { type: "我會念", hakka: "寒著咧！寒著會打哈啾，<br>寒著會頭那疾，還會發燒流鼻水。<br>寒著會嗽喉嗹疾，愛較緊去看醫生，<br>食藥歇睏正會好。", pinyin: "", chinese: "", audioId: "1我會念.mp3" }
         ];
 
         let wordsData = []; let sentencesData = []; let readData = []; let favorites = []; let currentAudio = null; let playbackQueue = []; let playbackIndex = 0;
@@ -177,7 +176,22 @@
         }
         function createCardHtml(item) {
             const isFav = favorites.includes(item.id) ? 'is-fav' : '';
-            return `<div class="card" onclick="playAudio('${item.audioId}')"><div class="play-btn-box"><span class="play-icon">▶️</span></div><div class="card-info"><p class="card-hakka">${item.hakka}</p><p class="card-pinyin">[ ${item.pinyin} ]</p><p class="card-chinese">${item.chinese}</p></div><button class="fav-btn ${isFav}" onclick="toggleFav('${item.id}', event)">♥</button></div>`;
+            const pinyinHtml = item.pinyin && item.pinyin.trim() !== "" ? `<p class="card-pinyin">[ ${item.pinyin} ]</p>` : '';
+            const chineseHtml = item.chinese && item.chinese.trim() !== "" ? `<p class="card-chinese">${item.chinese}</p>` : '';
+
+            return `
+                <div class="card" onclick="playAudio('${item.audioId}')">
+                    <div class="play-btn-box">
+                        <span class="play-icon">▶️</span>
+                    </div>
+                    <div class="card-info">
+                        <p class="card-hakka">${item.hakka}</p>
+                        ${pinyinHtml}
+                        ${chineseHtml}
+                    </div>
+                    <button class="fav-btn ${isFav}" onclick="toggleFav('${item.id}', event)">♥</button>
+                </div>
+            `;
         }
         function renderAll() {
             document.getElementById('words-page').innerHTML = wordsData.map(item => createCardHtml(item)).join('');
