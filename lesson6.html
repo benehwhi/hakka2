@@ -54,7 +54,7 @@
         .play-btn-box { background-color: var(--primary-light); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; }
         .play-icon { font-size: 20px; color: var(--primary-dark); margin-left: 2px; }
         .card-info { flex: 1; padding-right: 36px; }
-        .card-hakka { font-size: 22px; font-weight: bold; color: var(--primary-dark); margin: 0 0 4px 0; }
+        .card-hakka { font-size: 22px; font-weight: bold; color: var(--primary-dark); margin: 0 0 4px 0; line-height: 1.5; }
         .card-pinyin { font-size: 13px; color: #666666; margin: 0 0 4px 0; font-family: monospace; }
         .card-chinese { font-size: 15px; color: #555555; margin: 0; }
         .fav-btn { background: none; border: none; font-size: 26px; color: #D0D7DE; cursor: pointer; padding: 8px; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); z-index: 10; }
@@ -93,19 +93,18 @@
     </div>
     <script>
         const rawData = [
-           { type: "單詞", hakka: "好天", pinyin: "ho^  eenˇ", chinese: "晴天", audioId: "晴天.mp3" },
-{ type: "單詞", hakka: "日頭", pinyin: "ngidˋ  teuˋ", chinese: "太陽", audioId: "太陽.mp3" },
-{ type: "單詞", hakka: "恁熱", pinyin: "an^  ngied", chinese: "好熱", audioId: "好熱.mp3" },
-{ type: "單詞", hakka: "烏陰天", pinyin: "vuˇ  rhimˇ  tenˇ", chinese: "陰天", audioId: "陰天.mp3" },
-{ type: "單詞", hakka: "落雨天", pinyin: "log  vu^  tenˇ", chinese: "下雨天", audioId: "下雨天.mp3" },
-{ type: "單詞", hakka: "恁寒", pinyin: "an^  honˋ", chinese: "好冷", audioId: "好冷.mp3" },
-{ type: "單詞", hakka: "風", pinyin: "fungˇ", chinese: "風", audioId: "風.mp3" },
-{ type: "單詞", hakka: "響雷公", pinyin: "hiong^  luiˋ  gungˇ", chinese: "打雷", audioId: "打雷.mp3" },
-{ type: "單詞", hakka: "月光", pinyin: "ngied  gongˇ", chinese: "月亮", audioId: "月亮.mp3" },
-{ type: "單詞", hakka: "星", pinyin: "senˇ", chinese: "星星", audioId: "星星.mp3" },
-{ type: "諺語", hakka: "吂落雨先唱歌.任落乜無幾多", pinyin: "", chinese: "", audioId: "2諺語.mp3" },
-{ type: "我會念", hakka: "六月天公.雷公砰抨響.大雨霹啪落.日頭微微笑.日頭微微笑.六月天公變化多.又響天公又落雨.還會出日頭.還會出日頭", pinyin: "", chinese: "雷聲大，雨點小。虛張聲勢。", audioId: "2我會念.mp3" },
-
+            { type: "單詞", hakka: "好天", pinyin: "ho^  eenˇ", chinese: "晴天", audioId: "晴天.mp3" },
+            { type: "單詞", hakka: "日頭", pinyin: "ngidˋ  teuˋ", chinese: "太陽", audioId: "太陽.mp3" },
+            { type: "單詞", hakka: "恁熱", pinyin: "an^  ngied", chinese: "好熱", audioId: "好熱.mp3" },
+            { type: "單詞", hakka: "烏陰天", pinyin: "vuˇ  rhimˇ  tenˇ", chinese: "陰天", audioId: "陰天.mp3" },
+            { type: "單詞", hakka: "落雨天", pinyin: "log  vu^  tenˇ", chinese: "下雨天", audioId: "下雨天.mp3" },
+            { type: "單詞", hakka: "恁寒", pinyin: "an^  honˋ", chinese: "好冷", audioId: "好冷.mp3" },
+            { type: "單詞", hakka: "風", pinyin: "fungˇ", chinese: "風", audioId: "風.mp3" },
+            { type: "單詞", hakka: "響雷公", pinyin: "hiong^  luiˋ  gungˇ", chinese: "打雷", audioId: "打雷.mp3" },
+            { type: "單詞", hakka: "月光", pinyin: "ngied  gongˇ", chinese: "月亮", audioId: "月亮.mp3" },
+            { type: "單詞", hakka: "星", pinyin: "senˇ", chinese: "星星", audioId: "星星.mp3" },
+            { type: "諺語", hakka: "吂落雨先唱歌，任落乜無幾多", pinyin: "", chinese: "雷聲大，雨點小。虛張聲勢。", audioId: "2諺語.mp3" },
+            { type: "我會念", hakka: "六月天公，雷公抨抨響，<br>大雨霹啪落，日頭微微笑。<br>日頭微微笑，六月天公變化多，<br>又響天公又落雨，還會出日頭，還會出日頭。", pinyin: "", chinese: "", audioId: "2我會念.mp3" }
         ];
 
         let wordsData = []; let sentencesData = []; let readData = []; let favorites = []; let currentAudio = null; let playbackQueue = []; let playbackIndex = 0;
@@ -179,7 +178,22 @@
         }
         function createCardHtml(item) {
             const isFav = favorites.includes(item.id) ? 'is-fav' : '';
-            return `<div class="card" onclick="playAudio('${item.audioId}')"><div class="play-btn-box"><span class="play-icon">▶️</span></div><div class="card-info"><p class="card-hakka">${item.hakka}</p><p class="card-pinyin">[ ${item.pinyin} ]</p><p class="card-chinese">${item.chinese}</p></div><button class="fav-btn ${isFav}" onclick="toggleFav('${item.id}', event)">♥</button></div>`;
+            const pinyinHtml = item.pinyin && item.pinyin.trim() !== "" ? `<p class="card-pinyin">[ ${item.pinyin} ]</p>` : '';
+            const chineseHtml = item.chinese && item.chinese.trim() !== "" ? `<p class="card-chinese">${item.chinese}</p>` : '';
+
+            return `
+                <div class="card" onclick="playAudio('${item.audioId}')">
+                    <div class="play-btn-box">
+                        <span class="play-icon">▶️</span>
+                    </div>
+                    <div class="card-info">
+                        <p class="card-hakka">${item.hakka}</p>
+                        ${pinyinHtml}
+                        ${chineseHtml}
+                    </div>
+                    <button class="fav-btn ${isFav}" onclick="toggleFav('${item.id}', event)">♥</button>
+                </div>
+            `;
         }
         function renderAll() {
             document.getElementById('words-page').innerHTML = wordsData.map(item => createCardHtml(item)).join('');
